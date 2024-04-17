@@ -1,0 +1,27 @@
+2024-04-17 21:34:35,274 INFO    MainThread:892190 [wandb_setup.py:_flush():76] Current SDK version is 0.16.6
+2024-04-17 21:34:35,274 INFO    MainThread:892190 [wandb_setup.py:_flush():76] Configure stats pid to 892190
+2024-04-17 21:34:35,274 INFO    MainThread:892190 [wandb_setup.py:_flush():76] Loading settings from /home/ubuntu/.config/wandb/settings
+2024-04-17 21:34:35,274 INFO    MainThread:892190 [wandb_setup.py:_flush():76] Loading settings from /home/ubuntu/M2m/wandb/settings
+2024-04-17 21:34:35,274 INFO    MainThread:892190 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2024-04-17 21:34:35,274 INFO    MainThread:892190 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2024-04-17 21:34:35,274 INFO    MainThread:892190 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'train.py', 'program_abspath': '/home/ubuntu/M2m/train.py', 'program': '/home/ubuntu/M2m/train.py'}
+2024-04-17 21:34:35,274 INFO    MainThread:892190 [wandb_setup.py:_flush():76] Applying login settings: {}
+2024-04-17 21:34:35,274 INFO    MainThread:892190 [wandb_init.py:_log_setup():521] Logging user logs to /home/ubuntu/M2m/wandb/run-20240417_213435-mqmufe6g/logs/debug.log
+2024-04-17 21:34:35,274 INFO    MainThread:892190 [wandb_init.py:_log_setup():522] Logging internal logs to /home/ubuntu/M2m/wandb/run-20240417_213435-mqmufe6g/logs/debug-internal.log
+2024-04-17 21:34:35,274 INFO    MainThread:892190 [wandb_init.py:init():561] calling init triggers
+2024-04-17 21:34:35,274 INFO    MainThread:892190 [wandb_init.py:init():568] wandb.init called with sweep_config: {}
+config: {'lr': 0.1, 'model': 'resnet32', 'batch_size': 128, 'epoch': 200, 'seed': None, 'dataset': 'cifar10', 'decay': 0.0002, 'augment': True, 'name': 'ERM_RS', 'resume': False, 'net_g': None, 'net_g2': None, 'net_t': None, 'net_both': None, 'beta': 0.999, 'lam': 0.5, 'warm': 0, 'gamma': 0.99, 'eff_beta': 1.0, 'focal_gamma': 1.0, 'gen': False, 'step_size': 0.1, 'attack_iter': 10, 'imb_type': 'longtail', 'loss_type': 'CE', 'ratio': 10, 'imb_start': 5, 'smote': False, 'cost': False, 'effect_over': False, 'over': True}
+2024-04-17 21:34:35,274 INFO    MainThread:892190 [wandb_init.py:init():611] starting backend
+2024-04-17 21:34:35,274 INFO    MainThread:892190 [wandb_init.py:init():615] setting up manager
+2024-04-17 21:34:35,275 INFO    MainThread:892190 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-04-17 21:34:35,276 INFO    MainThread:892190 [wandb_init.py:init():623] backend started and connected
+2024-04-17 21:34:35,278 INFO    MainThread:892190 [wandb_init.py:init():715] updated telemetry
+2024-04-17 21:34:35,281 INFO    MainThread:892190 [wandb_init.py:init():748] communicating run to backend with 90.0 second timeout
+2024-04-17 21:34:35,802 INFO    MainThread:892190 [wandb_run.py:_on_init():2357] communicating current version
+2024-04-17 21:34:35,882 INFO    MainThread:892190 [wandb_run.py:_on_init():2366] got version response 
+2024-04-17 21:34:35,882 INFO    MainThread:892190 [wandb_init.py:init():799] starting run threads in backend
+2024-04-17 21:34:37,440 INFO    MainThread:892190 [wandb_run.py:_console_start():2335] atexit reg
+2024-04-17 21:34:37,441 INFO    MainThread:892190 [wandb_run.py:_redirect():2190] redirect: wrap_raw
+2024-04-17 21:34:37,441 INFO    MainThread:892190 [wandb_run.py:_redirect():2255] Wrapping output streams.
+2024-04-17 21:34:37,441 INFO    MainThread:892190 [wandb_run.py:_redirect():2280] Redirects installed.
+2024-04-17 21:34:37,442 INFO    MainThread:892190 [wandb_init.py:init():842] run started, returning control to user process

@@ -1,0 +1,128 @@
+{
+    "os": "Linux-5.15.146.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+    "python": "3.12.2",
+    "heartbeatAt": "2024-04-17T12:19:58.320198",
+    "startedAt": "2024-04-17T12:19:57.685632",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--no_over",
+        "--ratio",
+        "10",
+        "--decay",
+        "2e-4",
+        "--model",
+        "resnet32",
+        "--dataset",
+        "cifar10",
+        "--lr",
+        "0.1",
+        "--batch-size",
+        "128",
+        "--name",
+        "ERM",
+        "--warm",
+        "10",
+        "--epoch",
+        "10"
+    ],
+    "state": "running",
+    "program": "/home/ubuntu/M2m/train.py",
+    "codePathLocal": "train.py",
+    "codePath": "train.py",
+    "git": {
+        "remote": "https://github.com/pjy0422/M2m",
+        "commit": "a442282bdc380958ac51b87761c9a56438c0c3c4"
+    },
+    "email": "pjy0422@postech.ac.kr",
+    "root": "/home/ubuntu/M2m",
+    "host": "DESKTOP-J6N51DA",
+    "username": "ubuntu",
+    "executable": "/home/ubuntu/anaconda3/envs/venv_312/bin/python",
+    "cpu_count": 6,
+    "cpu_count_logical": 12,
+    "cpu_freq": {
+        "current": 3493.4429999999998,
+        "min": 0.0,
+        "max": 0.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3493.443,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3493.443,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3493.443,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3493.443,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3493.443,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3493.443,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3493.443,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3493.443,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3493.443,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3493.443,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3493.443,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3493.443,
+            "min": 0.0,
+            "max": 0.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 1006.853931427002,
+            "used": 44.05494689941406
+        }
+    },
+    "gpu": "NVIDIA GeForce RTX 4060 Ti",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 4060 Ti",
+            "memory_total": 8585740288
+        }
+    ],
+    "memory": {
+        "total": 15.585189819335938
+    }
+}

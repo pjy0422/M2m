@@ -1,0 +1,128 @@
+wandb_version: 1
+
+lr:
+  desc: null
+  value: 0.1
+model:
+  desc: null
+  value: resnet32
+batch_size:
+  desc: null
+  value: 128
+epoch:
+  desc: null
+  value: 20
+seed:
+  desc: null
+  value: null
+dataset:
+  desc: null
+  value: cifar10
+decay:
+  desc: null
+  value: 0.0002
+augment:
+  desc: null
+  value: true
+name:
+  desc: null
+  value: ERM
+resume:
+  desc: null
+  value: false
+net_g:
+  desc: null
+  value: null
+net_g2:
+  desc: null
+  value: null
+net_t:
+  desc: null
+  value: null
+net_both:
+  desc: null
+  value: null
+beta:
+  desc: null
+  value: 0.999
+lam:
+  desc: null
+  value: 0.5
+warm:
+  desc: null
+  value: 20
+gamma:
+  desc: null
+  value: 0.99
+eff_beta:
+  desc: null
+  value: 1.0
+focal_gamma:
+  desc: null
+  value: 1.0
+gen:
+  desc: null
+  value: false
+step_size:
+  desc: null
+  value: 0.1
+attack_iter:
+  desc: null
+  value: 10
+imb_type:
+  desc: null
+  value: longtail
+loss_type:
+  desc: null
+  value: CE
+ratio:
+  desc: null
+  value: 10
+imb_start:
+  desc: null
+  value: 5
+smote:
+  desc: null
+  value: false
+cost:
+  desc: null
+  value: false
+effect_over:
+  desc: null
+  value: false
+over:
+  desc: null
+  value: false
+_wandb:
+  desc: null
+  value:
+    python_version: 3.12.2
+    cli_version: 0.16.6
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1713356167.0
+    t:
+      1:
+      - 1
+      - 5
+      - 41
+      - 53
+      - 55
+      2:
+      - 1
+      - 5
+      - 41
+      - 53
+      - 55
+      3:
+      - 2
+      - 13
+      - 16
+      - 23
+      - 62
+      4: 3.12.2
+      5: 0.16.6
+      8:
+      - 5
+      13: linux-x86_64
