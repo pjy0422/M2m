@@ -10,7 +10,8 @@ import torchvision.transforms as transforms
 import wandb
 from data_loader import get_imbalanced, get_oversampled, get_smote, make_longtailed_imb
 from imblearn.metrics import geometric_mean_score
-from sklearn.metrics import balanced_accuracy_score
+from scipy.stats import gmean
+from sklearn.metrics import balanced_accuracy_score, precision_score, recall_score
 from utils import InputNormalize, sum_t
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -301,10 +302,16 @@ def evaluate(
             class_mask = targets == i
             class_total[i] += sum_t(class_mask)
             class_correct[i] += sum_t(correct_mask * class_mask)
-        all_targets.extend(targets.cpu().numpy())
-        all_predicted.extend(predicted.cpu().numpy())
-    gmean_score = geometric_mean_score(all_targets, all_predicted)
-    bal_acc_score = balanced_accuracy_score(all_targets, all_predicted, adjusted=True)
+        # Calculate recall for each class
+    # calculate recall using class_correct and class_total
+    recall = np.zeros(N_CLASSES)
+    for i in range(N_CLASSES):
+        recall[i] = class_correct[i] / class_total[i]
+    # for debug
+    # print each class's predict, correct, recall
+    bal_acc_score = np.mean(recall)
+    gmean_score = gmean(recall)
+    # Calculate balanced accuracy
     results = {
         "loss": total_loss / total,
         "acc": 100.0 * correct / total,
@@ -312,8 +319,8 @@ def evaluate(
         "neutral_acc": 100.0 * neutral_correct / neutral_total,
         "minor_acc": 100.0 * minor_correct / minor_total,
         "class_acc": 100.0 * class_correct / class_total,
-        "test_gm": 100.0 * gmean_score,
         "test_bal_acc": 100.0 * bal_acc_score,
+        "test_gm": 100.0 * gmean_score,
     }
 
     msg = (

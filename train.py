@@ -16,7 +16,8 @@ import torch.nn.functional as F
 import torch.optim as optim
 from config import *
 from imblearn.metrics import geometric_mean_score
-from sklearn.metrics import balanced_accuracy_score
+from scipy.stats import gmean
+from sklearn.metrics import balanced_accuracy_score, precision_score, recall_score
 from torch.autograd import Variable, grad
 from tqdm import tqdm
 from utils import (
@@ -116,9 +117,23 @@ def train_epoch(model, criterion, optimizer, data_loader, logger=None):
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+    all_targets = np.array(all_targets)
+    all_predicted = np.array(all_predicted)
 
-    gmean_score = geometric_mean_score(all_targets, all_predicted)
-    bal_acc_score = balanced_accuracy_score(all_targets, all_predicted, adjusted=True)
+    # Get unique classes
+    classes = np.unique(all_targets)
+
+    # Calculate recall for each class
+    recalls = [
+        recall_score(all_targets == cls, all_predicted == cls) + 1e-10
+        for cls in classes
+    ]
+
+    # Calculate balanced accuracy
+    bal_acc_score = np.mean(recalls)
+
+    # Calculate geometric mean score
+    gmean_score = gmean(recalls)
 
     msg = "Loss: %.3f| Acc: %.3f%% (%d/%d) | GMean: %.3f | BalAcc: %.3f" % (
         train_loss / total,
@@ -378,9 +393,7 @@ def train_gen_epoch(net_t, net_g, criterion, optimizer, data_loader):
         "p_g_orig": p_g_orig / total_gen,
         "p_g_targ": p_g_targ / total_gen,
         "t_success": t_success,
-        "train_bal_acc": balanced_accuracy_score(
-            all_targets, all_predicted, adjusted=True
-        ),
+        "train_bal_acc": balanced_accuracy_score(all_targets, all_predicted),
         "train_gm": geometric_mean_score(all_targets, all_predicted),
     }
 
