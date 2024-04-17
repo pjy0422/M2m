@@ -629,5 +629,5 @@ if __name__ == "__main__":
         # log using wandb
     df = pd.read_csv(LOG_CSV)
     df_table = wandb.Table(dataframe=df)
-    wandb.summary["result"] = df_table
+    wandb.log({"table": df_table})
     wandb.finish()
