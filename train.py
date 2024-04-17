@@ -52,8 +52,8 @@ LOG_CSV_HEADER = [
     "minor test acc",
     "test acc",
     "f1 score",
-    "test bal acc",
     "test gm",
+    "test bal acc",
 ]
 if not os.path.exists(LOG_CSV):
     with open(LOG_CSV, "w") as f:

@@ -310,6 +310,8 @@ def evaluate(
     # for debug
     # print each class's predict, correct, recall
     bal_acc_score = np.mean(recall)
+    # only use nonzero values
+    recall = recall[recall.nonzero()]
     gmean_score = gmean(recall)
     # Calculate balanced accuracy
     results = {
