@@ -132,7 +132,11 @@ def parse_args():
 
 ARGS = parse_args()
 
-wandb.init(project=f"M2m,cifar-lt-10,r={ARGS.ratio}", name=ARGS.name, config=ARGS)
+if ARGS.dataset == "cifar10":
+    pj_name = "M2m,cifar-lt-10"
+elif ARGS.dataset == "cifar100":
+    pj_name = "M2m,cifar-lt-100"
+wandb.init(project=f"{pj_name},r={ARGS.ratio}", name=ARGS.name, config=ARGS)
 
 
 if ARGS.seed is not None:
