@@ -83,6 +83,14 @@ def save_checkpoint(acc, model, optim, epoch, index=False):
 
     ckpt_path = os.path.join(LOGDIR, ckpt_name)
     torch.save(state, ckpt_path)
+    if (
+        ARGS.name == "ERM"
+        or ARGS.name == "LDAM-DRW"
+        or ARGS.name == "ERM-M2m"
+        or ARGS.name == "LDAM-DRW-M2m"
+    ):
+        file_name = f"/home/pjy0422/M2m/checkpoint/{ARGS.name}_{ARGS.model}_{ARGS.dataset}_{ARGS.ratio}.t7"
+        torch.save(state, file_name)
 
 
 def train_epoch(model, criterion, optimizer, data_loader, logger=None):
@@ -642,5 +650,31 @@ if __name__ == "__main__":
         # log using wandb
     df = pd.read_csv(LOG_CSV)
     df_table = wandb.Table(dataframe=df)
+    csv_folder = os.path.join("/home/pjy0422/M2m/", "csv")
+    os.makedirs(csv_folder, exist_ok=True)
+    test_last_result = df.iloc[-1]
+    test_last_result["name"] = ARGS.name
+    test_last_result["model"] = ARGS.model
+    file_name = f"{ARGS.dataset}_{ARGS.ratio}.csv"
+    # specify the path to the csv file
+    csv_file_path = os.path.join(csv_folder, file_name)
+    new_df = pd.DataFrame([test_last_result])
+    # check if the file exists
+    if os.path.isfile(csv_file_path):
+        # load the existing csv file into a DataFrame
+        existing_df = pd.read_csv(csv_file_path)
+
+        # check if ARGS.name is already in the DataFrame
+        if ARGS.name not in existing_df["name"].values:
+            # if not, append test_last_result to the DataFrame
+            existing_df = pd.concat([existing_df, new_df], axis=0, ignore_index=True)
+
+            # save the DataFrame to the csv file
+            existing_df.to_csv(csv_file_path, index=False)
+    else:
+        # if the file doesn't exist, create a new DataFrame from test_last_result
+
+        # save the new DataFrame to the csv file
+        new_df.to_csv(csv_file_path, index=False)
     wandb.log({"table": df_table})
     wandb.finish()
