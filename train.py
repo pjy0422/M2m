@@ -581,7 +581,7 @@ if __name__ == "__main__":
         val_eval_copy_for_log["val_classwise_acc_avg"] = val_eval["class_acc"].mean()
         # wandb.log(train_stats)
         # wandb.log(val_eval_copy_for_log)
-        val_acc = val_eval["acc"]
+        val_acc = val_eval["test_bal_acc"]
         if val_acc >= BEST_VAL:
             BEST_VAL = val_acc
 
@@ -600,7 +600,7 @@ if __name__ == "__main__":
                 "class_acc"
             ].mean()
             # wandb.log(test_stats_copy_for_log, step=epoch)
-            TEST_ACC = test_stats["acc"]
+            TEST_ACC = test_stats["test_bal_acc"]
             TEST_ACC_CLASS = test_stats["class_acc"]
 
             save_checkpoint(TEST_ACC, net, optimizer, epoch)
@@ -658,7 +658,7 @@ if __name__ == "__main__":
     file_name = f"{ARGS.dataset}_{ARGS.ratio}.csv"
     # specify the path to the csv file
     csv_file_path = os.path.join(csv_folder, file_name)
-    new_df = pd.DataFrame([test_last_result])
+    new_df = pd.DataFrame([test_last_result]).round(1)
     # check if the file exists
     if os.path.isfile(csv_file_path):
         # load the existing csv file into a DataFrame

@@ -37,7 +37,7 @@ python $HOME/M2m/train.py -gen -r --ratio 10  --decay 2e-4 --model resnet32 --da
 python $HOME/M2m/train.py --no_over --loss_type Focal --focal_gamma 1.0 --ratio 10 --decay 2e-4 --model resnet32 --dataset cifar100 --lr 0.1 --batch-size 128 --name 'Focal' --warm 160 --epoch 200
 python $HOME/M2m/train.py --no_over -c --loss_type LDAM --eff_beta 0.999 --ratio 10 --decay 2e-4 --model resnet32_norm --dataset cifar100 --lr 0.1 --batch-size 128 --name 'LDAM' --warm 0 --epoch 200
 python $HOME/M2m/train.py --no_over -c --loss_type LDAM --eff_beta 0.999 --ratio 10 --decay 2e-4 --model resnet32_norm --dataset cifar100 --lr 0.1 --batch-size 128 --name 'LDAM-DRW' --warm 160 --epoch 200
-python $HOME/M2m/train.py -gen -r -c --loss_type LDAM  --eff_beta 0.999  --ratio 10 --decay 2e-4 --model resnet32 --dataset cifar100 --lr 0.1 --batch-size 128 --name 'LDAM-DRW-M2m' --beta 0.999 --lam 0.5 --gamma 0.9 --step_size 0.1 --attack_iter 10 --warm 160 --epoch 200 --net_g $HOME/M2m/checkpoint/LDAM-DRW_resnet32_norm_cifar100_10.t7
+python $HOME/M2m/train.py -gen -r -c --loss_type LDAM  --eff_beta 0.999  --ratio 10 --decay 2e-4 --model resnet32_norm --dataset cifar100 --lr 0.1 --batch-size 128 --name 'LDAM-DRW-M2m' --beta 0.999 --lam 0.5 --gamma 0.9 --step_size 0.1 --attack_iter 10 --warm 160 --epoch 200 --net_g $HOME/M2m/checkpoint/LDAM-DRW_resnet32_norm_cifar100_10.t7
 
 hostname  # 무슨 노드에 배치됐는지 표시
 conda deactivate
