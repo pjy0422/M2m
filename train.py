@@ -85,9 +85,9 @@ def save_checkpoint(acc, model, optim, epoch, index=False):
     torch.save(state, ckpt_path)
     if (
         ARGS.name == "ERM"
-        or ARGS.name == "LDAM-DRW"
+        or ARGS.name == "LDAM"
         or ARGS.name == "ERM-M2m"
-        or ARGS.name == "LDAM-DRW-M2m"
+        or ARGS.name == "LDAM-M2m"
     ):
         file_name = f"/home/pjy0422/M2m/checkpoint/{ARGS.name}_{ARGS.model}_{ARGS.dataset}_{ARGS.ratio}.t7"
         torch.save(state, file_name)
@@ -652,13 +652,14 @@ if __name__ == "__main__":
     df_table = wandb.Table(dataframe=df)
     csv_folder = os.path.join("/home/pjy0422/M2m/", "csv")
     os.makedirs(csv_folder, exist_ok=True)
-    test_last_result = df.iloc[-1]
+    test_last_idx = df["test bal acc"].idxmax()
+    test_last_result = df.loc[test_last_idx]
     test_last_result["name"] = ARGS.name
     test_last_result["model"] = ARGS.model
     file_name = f"{ARGS.dataset}_{ARGS.ratio}.csv"
     # specify the path to the csv file
     csv_file_path = os.path.join(csv_folder, file_name)
-    new_df = pd.DataFrame([test_last_result]).round(1)
+    new_df = pd.DataFrame([test_last_result]).round(2)
     # check if the file exists
     if os.path.isfile(csv_file_path):
         # load the existing csv file into a DataFrame
@@ -670,7 +671,18 @@ if __name__ == "__main__":
             existing_df = pd.concat([existing_df, new_df], axis=0, ignore_index=True)
 
             # save the DataFrame to the csv file
-            existing_df.to_csv(csv_file_path, index=False)
+            existing_df.round(2).to_csv(csv_file_path, index=False)
+        elif ARGS.name in existing_df["name"].values:
+            # if ARGS.name is already in the DataFrame, update the row with test_last_result if the test accuracy of the new result is higher
+            existing_idx = existing_df[existing_df["name"] == ARGS.name].index[0]
+            if (
+                test_last_result["test bal acc"]
+                > existing_df.loc[existing_idx]["test bal acc"]
+            ):
+                existing_df.loc[existing_idx] = test_last_result.round(2)
+
+                # save the DataFrame to the csv file
+                existing_df.round(2).to_csv(csv_file_path, index=False)
     else:
         # if the file doesn't exist, create a new DataFrame from test_last_result
 
