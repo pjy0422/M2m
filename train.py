@@ -218,8 +218,12 @@ def generation(
     one_hot = torch.zeros_like(outputs_g)
     one_hot.scatter_(1, targets.view(-1, 1), 1)
     probs_g = torch.softmax(outputs_g, dim=1)[one_hot.to(torch.bool)]
+    flag = (ARGS.ratio == 1) and (ARGS.imb_type == "none")
 
-    correct = (probs_g >= gamma) * torch.bernoulli(p_accept).byte().to(device)
+    if flag == True:
+        correct = torch.ones_like(torch.bernoulli(p_accept).byte()).to(device)
+    elif flag == False:
+        correct = (probs_g >= gamma) * torch.bernoulli(p_accept).byte().to(device)
     model_r.train()
 
     return inputs, correct
@@ -239,15 +243,16 @@ def train_net(
 
     inputs = inputs_orig.clone()
     targets = targets_orig.clone()
+    gen_idx = gen_idx.to(device)
+    gen_targets = gen_targets.to(device)
 
     ########################
 
     bs = N_SAMPLES_PER_CLASS_T[targets_orig].repeat(gen_idx.size(0), 1)
     gs = N_SAMPLES_PER_CLASS_T[gen_targets].view(-1, 1)
-
     delta = F.relu(bs - gs)
     p_accept = 1 - ARGS.beta**delta
-    mask_valid = p_accept.sum(1) > 0
+    mask_valid = (p_accept.sum(1) > 0).to(device)
 
     gen_idx = gen_idx[mask_valid]
     gen_targets = gen_targets[mask_valid]
@@ -258,6 +263,14 @@ def train_net(
 
     seed_targets = targets_orig[select_idx]
     seed_images = inputs_orig[select_idx]
+
+    if ARGS.ratio == 1 and ARGS.imb_type == "none":
+        p_accept = torch.ones_like(p_accept)
+        gen_idx = torch.arange(batch_size).to(device)
+        # gen_targets = torch.randint(N_CLASSES, (batch_size,)).to(device).long()
+        gen_targets = targets_orig  # why? because we want to generate the same class
+        seed_targets = targets_orig
+        seed_images = inputs_orig
 
     gen_inputs, correct_mask = generation(
         model_gen,
@@ -276,6 +289,8 @@ def train_net(
     ########################
 
     # Only change the correctly generated samples
+    if ARGS.ratio == 1 and ARGS.imb_type == "none":
+        correct_mask = torch.ones(batch_size, dtype=torch.bool, device=device)
     num_gen = sum_t(correct_mask)
     num_others = batch_size - num_gen
 
@@ -563,7 +578,6 @@ if __name__ == "__main__":
                 "train_bal_acc": train_bal_acc,
                 "train_gm": train_gm,
             }
-            print(train_stats.get("train_bal_acc", 0))
             if epoch == 159:
                 save_checkpoint(train_acc, net, optimizer, epoch, True)
 
