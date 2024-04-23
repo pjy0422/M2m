@@ -90,7 +90,8 @@ def save_checkpoint(acc, model, optim, epoch, index=False):
         or ARGS.name == "LDAM-M2m"
     ):
         file_name = f"/home/pjy0422/M2m/checkpoint/{ARGS.name}_{ARGS.model}_{ARGS.dataset}_{ARGS.ratio}.t7"
-        torch.save(state, file_name)
+        if not os.path.exists(file_name):
+            torch.save(state, file_name)
 
 
 def train_epoch(model, criterion, optimizer, data_loader, logger=None):
@@ -670,7 +671,7 @@ if __name__ == "__main__":
     test_last_result = df.loc[test_last_idx]
     test_last_result["name"] = ARGS.name
     test_last_result["model"] = ARGS.model
-    file_name = f"{ARGS.dataset}_{ARGS.ratio}.csv"
+    file_name = f"{ARGS.dataset}_{ARGS.ratio}_{ARGS.n_samples}.csv"
     # specify the path to the csv file
     csv_file_path = os.path.join(csv_folder, file_name)
     new_df = pd.DataFrame([test_last_result]).round(2)

@@ -127,7 +127,7 @@ def parse_args():
     parser.add_argument(
         "--no_over", dest="over", action="store_false", help="Do not use over-sampling"
     )
-
+    parser.add_argument("--n_samples", default=500, type=int, help="dataset sample size")
     return parser.parse_args()
 
 
@@ -168,12 +168,12 @@ print("==> Preparing data: %s" % DATASET)
 
 if DATASET == "cifar100":
     N_CLASSES = 100
-    N_SAMPLES = 500
+    N_SAMPLES = ARGS.n_samples
     mean = torch.tensor([0.5071, 0.4867, 0.4408])
     std = torch.tensor([0.2675, 0.2565, 0.2761])
 elif DATASET == "cifar10":
     N_CLASSES = 10
-    N_SAMPLES = 5000
+    N_SAMPLES = ARGS.n_samples
     mean = torch.tensor([0.4914, 0.4822, 0.4465])
     std = torch.tensor([0.2023, 0.1994, 0.2010])
 else:
