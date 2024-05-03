@@ -92,6 +92,10 @@ def save_checkpoint(acc, model, optim, epoch, index=False):
         file_name = f"/home/pjy0422/M2m/checkpoint/{ARGS.name}_{ARGS.model}_{ARGS.dataset}_{ARGS.ratio}.t7"
         if not os.path.exists(file_name):
             torch.save(state, file_name)
+        if (epoch==ARGS.warm-1):
+            file_name = f"/home/pjy0422/M2m/checkpoint/{ARGS.name}_{ARGS.model}_{ARGS.dataset}_{ARGS.ratio}_warm.t7"
+            torch.save(state, file_name)
+        
 
 
 def train_epoch(model, criterion, optimizer, data_loader, logger=None):
