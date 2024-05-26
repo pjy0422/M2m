@@ -610,6 +610,18 @@ if __name__ == "__main__":
         ## Training ( ARGS.warm is used for deferred re-balancing ) ##
 
         if epoch >= ARGS.warm and ARGS.gen:
+            if epoch == 199:
+                train_loss, train_acc, train_bal_acc, train_gm = train_epoch(
+                    net, criterion, optimizer, train_loader, logger
+                )
+
+                train_stats = {
+                    "train_loss": train_loss,
+                    "train_acc": train_acc,
+                    "train_bal_acc": train_bal_acc,
+                    "train_gm": train_gm,
+                }
+                break
             train_stats = train_gen_epoch(
                 net, net_seed, criterion, optimizer, train_loader
             )
