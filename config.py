@@ -1,5 +1,6 @@
 import argparse
 
+import matplotlib.pyplot as plt
 import models
 import numpy as np
 import pandas as pd
@@ -10,7 +11,10 @@ import torchvision.transforms as transforms
 import wandb
 from data_loader import get_imbalanced, get_oversampled, get_smote, make_longtailed_imb
 from imblearn.metrics import geometric_mean_score
+from matplotlib.colors import ListedColormap
 from scipy.stats import gmean
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
 from sklearn.metrics import balanced_accuracy_score, precision_score, recall_score
 from utils import InputNormalize, sum_t
 
@@ -282,7 +286,6 @@ def evaluate(
 
         outputs, _ = net(normalizer(inputs))
         loss = criterion(outputs, targets)
-
         total_loss += loss.item() * batch_size
         predicted = outputs[:, :N_CLASSES].max(1)[1]
         total += batch_size

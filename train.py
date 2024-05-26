@@ -9,6 +9,9 @@ from __future__ import print_function
 import csv
 import os
 
+import matplotlib.pyplot as plt
+
+plt.switch_backend("agg")
 import numpy as np
 import torch
 import torch.nn as nn
@@ -106,6 +109,8 @@ def train_epoch(model, criterion, optimizer, data_loader, logger=None):
 
     all_targets = []
     all_predicted = []
+    all_outputs = []
+    class_counts = {}
 
     for inputs, targets in tqdm(data_loader):
         # For SMOTE, get the samples from smote_loader instead of usual loader
@@ -123,15 +128,24 @@ def train_epoch(model, criterion, optimizer, data_loader, logger=None):
         total += batch_size
         correct += sum_t(predicted.eq(targets))
 
-        all_targets.extend(targets.cpu().numpy())
-        all_predicted.extend(predicted.cpu().numpy())
+        for target, prediction, output in zip(
+            targets.cpu().numpy(),
+            predicted.cpu().numpy(),
+            outputs.detach().cpu().numpy(),
+        ):
+            if class_counts.get(target, 0) < 50:
+                all_targets.append(target)
+                all_predicted.append(prediction)
+                all_outputs.append(output)
+                class_counts[target] = class_counts.get(target, 0) + 1
 
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+
     all_targets = np.array(all_targets)
     all_predicted = np.array(all_predicted)
-
+    all_outputs = np.array(all_outputs)
     # Get unique classes
     classes = np.unique(all_targets)
 
@@ -160,6 +174,28 @@ def train_epoch(model, criterion, optimizer, data_loader, logger=None):
         logger.log(msg)
     else:
         print(msg)
+
+    # Apply t-SNE to the outputs
+    tsne = TSNE(n_components=2, random_state=42)
+    outputs_tsne = tsne.fit_transform(all_outputs)
+
+    # Plot the t-SNE results
+    plt.figure(figsize=(10, 8))
+    for class_index in classes:
+        idxs = [i for i, x in enumerate(all_targets) if x == class_index]
+        if len(idxs) > 50:
+            idxs = np.random.choice(idxs, 50, replace=False)
+        plt.scatter(
+            outputs_tsne[idxs, 0], outputs_tsne[idxs, 1], label=f"Class {class_index}"
+        )
+
+    plt.legend()
+    plt.title("t-SNE of Training Set Outputs")
+    plt.grid(True)
+    plt.gca().axes.get_xaxis().set_visible(False)
+    plt.gca().axes.get_yaxis().set_visible(False)
+    plt.savefig("train_set_decision_boundary.png")
+    plt.close()
 
     return (
         train_loss / total,
@@ -345,6 +381,14 @@ def train_net(
         if num_gen > 0:
             success[i, 0] = sum_t(gen_targets_c == i)
         success[i, 1] = sum_t(gen_targets == i)
+    all_targets = targets.cpu().numpy()
+    num_samples_per_class = 50
+    # Ensure outputs is a list or sequence before concatenating
+
+    # Concatenate outputs into a single tensor
+
+    # Use the appropriate indexing for `all_outputs`
+    # Convert all_outputs to numpy for t-SNE
 
     return (
         oth_loss_total,
