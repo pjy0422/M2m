@@ -89,13 +89,12 @@ def save_checkpoint(acc, model, optim, epoch, index=False):
         or ARGS.name == "ERM-M2m"
         or ARGS.name == "LDAM-M2m"
     ):
-        file_name = f"/home/pjy0422/M2m/checkpoint/{ARGS.name}_{ARGS.model}_{ARGS.dataset}_{ARGS.ratio}.t7"
+        file_name = f"/home/ubuntu/M2m/checkpoint/{ARGS.name}_{ARGS.model}_{ARGS.dataset}_{ARGS.ratio}.t7"
         if not os.path.exists(file_name):
             torch.save(state, file_name)
-        if (epoch==ARGS.warm-1):
-            file_name = f"/home/pjy0422/M2m/checkpoint/{ARGS.name}_{ARGS.model}_{ARGS.dataset}_{ARGS.ratio}_warm.t7"
+        if epoch == ARGS.warm - 1:
+            file_name = f"/home/ubuntu/M2m/checkpoint/{ARGS.name}_{ARGS.model}_{ARGS.dataset}_{ARGS.ratio}_warm.t7"
             torch.save(state, file_name)
-        
 
 
 def train_epoch(model, criterion, optimizer, data_loader, logger=None):
@@ -295,7 +294,9 @@ def train_net(
 
     # Only change the correctly generated samples
     if ARGS.ratio == 1 and ARGS.imb_type == "none":
-        correct_mask = torch.ones(batch_size, dtype=torch.bool, device=device)
+        probabilities = torch.full((batch_size,), ARGS.gen_prob, device=device)
+
+        correct_mask = torch.bernoulli(probabilities).bool()
     num_gen = sum_t(correct_mask)
     num_others = batch_size - num_gen
 
@@ -669,7 +670,7 @@ if __name__ == "__main__":
         # log using wandb
     df = pd.read_csv(LOG_CSV)
     df_table = wandb.Table(dataframe=df)
-    csv_folder = os.path.join("/home/pjy0422/M2m/", "csv")
+    csv_folder = os.path.join("/home/ubuntu/M2m/", "csv")
     os.makedirs(csv_folder, exist_ok=True)
     test_last_idx = df["test bal acc"].idxmax()
     test_last_result = df.loc[test_last_idx]
@@ -697,6 +698,8 @@ if __name__ == "__main__":
             if (
                 test_last_result["test bal acc"]
                 > existing_df.loc[existing_idx]["test bal acc"]
+            ) and (
+                test_last_result["test gm"] > existing_df.loc[existing_idx]["test gm"]
             ):
                 existing_df.loc[existing_idx] = test_last_result.round(2)
 

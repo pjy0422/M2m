@@ -127,7 +127,11 @@ def parse_args():
     parser.add_argument(
         "--no_over", dest="over", action="store_false", help="Do not use over-sampling"
     )
-    parser.add_argument("--n_samples", default=500, type=int, help="dataset sample size")
+    parser.add_argument(
+        "--n_samples", default=500, type=int, help="dataset sample size"
+    )
+
+    parser.add_argument("--gen_prob", default=0.5, type=float, help="generation prob")
     return parser.parse_args()
 
 
